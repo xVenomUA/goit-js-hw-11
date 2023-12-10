@@ -54,4 +54,11 @@ img {
   display: block;
   max-width: 100%;
 } 
-
+.is-hidden{ 
+ visibility: hidden;
+}
+.load-more{ 
+  display: block;
+  margin: 0 auto;
+  margin-top: 50px;
+}
