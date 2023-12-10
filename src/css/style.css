@@ -8,7 +8,7 @@
   width: 100%;
   padding: 30px;
   gap: 32px;
-  box-shadow: rgba(19, 19, 206, 0.25) 0px 13px 27px -5px,
+  box-shadow: rgba(19, 19, 206, 0.25) 0px 12px 24px -8px,
     rgba(121, 33, 33, 0.3) 0px 8px 16px -8px;
   background-color: rgb(210, 235, 175);
   opacity: 0.9;
@@ -26,8 +26,32 @@ button {
   border: none;
   background-color: rgb(247, 210, 0);
   transition: 500ms;
+  cursor: pointer;
 }
 button:hover,
 button:focus {
   background-color: rgb(73, 114, 11);
 }
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 140px;
+  gap: 30px;
+  row-gap: 40px;
+  
+}
+.photo-card {
+  box-shadow: 
+    rgba(121, 33, 33, 0.3) 0px 8px 16px -8px, 
+    rgba(121, 33, 33, 0.3) 0px -8px 16px -8px,
+    rgba(121, 33, 33, 0.3) 8px 0px 16px -8px,
+    rgba(121, 33, 33, 0.3) -8px 0px 16px -8px;
+  padding: 5px;
+  background-color: rgb(187, 190, 76);
+}
+img {
+  display: block;
+  max-width: 100%;
+} 
+
