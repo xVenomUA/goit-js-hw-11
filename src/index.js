@@ -37,19 +37,16 @@ function onFetch(evt) {
       } else {
         Notify.success(`Hooray! We found ${data.total} totalHits images.`);
         createMarkup(datasearch);
-        loadMore.classList.remove('is-hidden');
       }
-      if (data.total < per_page) { 
-        loadMore.classList.add('is-hidden')
-        Notify.info(
-          "We're sorry, but you've reached the end of search results."
-        );
-        return
+      if (data.totalHits > per_page) {
+        loadMore.classList.remove('is-hidden');
+        window.addEventListener('scroll', scrollinfinity);
       }
     })
     .catch(error => {
       throw new Error(`${error}`);
     });
+
   loadMore.addEventListener('click', LoadingMore);
   evt.target.reset();
 }
@@ -58,15 +55,22 @@ function LoadingMore() {
   page += 1;
   console.log(`page = ${page}`);
   fetchinfo(searchValue, page, per_page).then(data => {
-    let dseatch = data.hits;
+    const dseatch = data.hits;
     console.log(dseatch);
     const lastPage = Math.ceil(data.totalHits / per_page);
     console.log(lastPage);
-    if (page > lastPage || data.totalHits < per_page) {
-      Notify.info("We're sorry, but you've reached the end of search results.");
-      loadMore.classList.add('is-hidden');
-      return;
-    }
     createMarkup(dseatch);
+    if (page === lastPage) {
+      loadMore.classList.add('is-hidden');
+      Notify.info("We're sorry, but you've reached the end of search results.");
+      loadMore.removeEventListener('click', LoadingMore);
+      window.removeEventListener('scroll', scrollinfinity);
+    }
   });
+}
+function scrollinfinity() {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  if (scrollTop + clientHeight >= scrollHeight - 80) {
+    LoadingMore();
+  }
 }
