@@ -14,7 +14,7 @@ let page = 1;
 let searchValue = '';
 objectInfo.search.addEventListener('submit', onFetch);
 
-function onFetch(evt) {
+async function onFetch(evt) {
   evt.preventDefault();
   objectInfo.gallery.innerHTML = '';
   searchValue = evt.target.searchQuery.value;
@@ -51,14 +51,11 @@ function onFetch(evt) {
   evt.target.reset();
 }
 
-function LoadingMore() {
+ async function LoadingMore() {
   page += 1;
-  console.log(`page = ${page}`);
   fetchinfo(searchValue, page, per_page).then(data => {
     const dseatch = data.hits;
-    console.log(dseatch);
     const lastPage = Math.ceil(data.totalHits / per_page);
-    console.log(lastPage);
     createMarkup(dseatch);
     if (page === lastPage) {
       loadMore.classList.add('is-hidden');
