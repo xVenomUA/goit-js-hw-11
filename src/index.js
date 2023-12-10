@@ -62,7 +62,7 @@ function LoadingMore() {
     console.log(dseatch);
     const lastPage = Math.ceil(data.totalHits / per_page);
     console.log(lastPage);
-    if (page === lastPage + 1 || data.totalHits < per_page) {
+    if (page > lastPage || data.totalHits < per_page) {
       Notify.info("We're sorry, but you've reached the end of search results.");
       loadMore.classList.add('is-hidden');
       return;
