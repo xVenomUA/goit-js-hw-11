@@ -54,12 +54,12 @@ function onFetch(evt) {
   evt.target.reset();
 }
 
-
 function LoadingMore() {
   page += 1;
   console.log(`page = ${page}`);
   fetchinfo(searchValue, page, per_page).then(data => {
-    datasearch = data.hits;
+    let dseatch = data.hits;
+    console.log(dseatch);
     const lastPage = Math.ceil(data.totalHits / per_page);
     console.log(lastPage);
     if (page === lastPage + 1 || data.totalHits < per_page) {
@@ -67,6 +67,6 @@ function LoadingMore() {
       loadMore.classList.add('is-hidden');
       return;
     }
-    createMarkup(datasearch);
+    createMarkup(dseatch);
   });
 }
