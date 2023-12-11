@@ -1,6 +1,7 @@
 import { fetchinfo } from './js/api-pixabay';
 import { createMarkup } from './js/createMarkUP';
 import { Notify } from 'notiflix';
+import Notiflix from 'notiflix';
 const loadMore = document.querySelector('.load-more');
 loadMore.classList.add('is-hidden');
 
@@ -50,9 +51,11 @@ async function onFetch(evt) {
 
 async function LoadingMore() {
   page += 1;
+  Notiflix.Loading.dots('Loading...');
   fetchinfo(searchValue, page).then(data => {
     const dseatch = data.hits;
     const lastPage = Math.ceil(data.totalHits / per_page);
+    Notiflix.Loading.remove();
     createMarkup(dseatch);
     if (page === lastPage) {
       Notify.info("We're sorry, but you've reached the end of search results.");
@@ -62,7 +65,7 @@ async function LoadingMore() {
 }
 function scrollinfinity() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight -20) {
+  if (scrollTop + clientHeight >= scrollHeight - 20) {
     LoadingMore();
   }
 }
