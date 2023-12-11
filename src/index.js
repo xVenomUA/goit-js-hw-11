@@ -1,7 +1,6 @@
 import { fetchinfo } from './js/api-pixabay';
 import { createMarkup } from './js/createMarkUP';
 import { Notify } from 'notiflix';
-import InfiniteScroll from 'infinite-scroll';
 const loadMore = document.querySelector('.load-more');
 loadMore.classList.add('is-hidden');
 
@@ -63,7 +62,7 @@ async function LoadingMore() {
 }
 function scrollinfinity() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight) {
+  if (scrollTop + clientHeight >= scrollHeight -20) {
     LoadingMore();
   }
 }
