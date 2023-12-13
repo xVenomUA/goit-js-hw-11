@@ -26,30 +26,30 @@ async function onFetch(evt) {
   }
   page = 1;
 
-try {
-  const { hits, totalHits } = await fetchinfo(searchValue, page);
-  if (totalHits === 0) {
-    Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-    Notiflix.Loading.remove();
-    evt.target.reset();
-    return;
-  } else {
-    Notify.success(`Hooray! We found ${totalHits} totalHits images.`);
-    Notiflix.Loading.remove();
-    createMarkup(hits);
-  }
+  try {
+    const { hits, totalHits } = await fetchinfo(searchValue, page);
+    if (totalHits === 0) {
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      Notiflix.Loading.remove();
+      evt.target.reset();
+      return;
+    } else {
+      Notify.success(`Hooray! We found ${totalHits} totalHits images.`);
+      Notiflix.Loading.remove();
+      createMarkup(hits);
+    }
 
-  if (totalHits <= per_page) {
-    loadMore.classList.add('is-hidden');
-  } else {
-    loadMore.classList.remove('is-hidden');
-    loadMore.addEventListener('click', LoadingMore);
-  } 
-} catch (error) {
-  throw new Error(error);
-}
+    if (totalHits <= per_page) {
+      loadMore.classList.add('is-hidden');
+    } else {
+      loadMore.classList.remove('is-hidden');
+      loadMore.addEventListener('click', LoadingMore);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
   evt.target.reset();
 }
 
