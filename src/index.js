@@ -15,6 +15,7 @@ let searchValue = '';
 refs.search.addEventListener('submit', onFetch);
 
 async function onFetch(evt) {
+  Notiflix.Loading.dots('Loading...');
   evt.preventDefault();
   refs.gallery.innerHTML = '';
   searchValue = evt.target.searchQuery.value;
@@ -24,48 +25,43 @@ async function onFetch(evt) {
     return;
   }
   page = 1;
-  fetchinfo(searchValue, page)
-    .then(data => {
-      console.log(data);
-      let datasearch = data.hits;
-      if (data.total === 0) {
-        Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-        evt.target.reset();
-        return;
-      } else {
-        Notify.success(`Hooray! We found ${data.total} totalHits images.`);
-        createMarkup(datasearch);
-      }
-      if (data.totalHits > per_page) {
-        window.addEventListener('scroll', scrollinfinity);
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  
+
+try {
+  const { hits, totalHits } = await fetchinfo(searchValue, page);
+  if (totalHits === 0) {
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    Notiflix.Loading.remove();
+    evt.target.reset();
+    return;
+  } else {
+    Notify.success(`Hooray! We found ${totalHits} totalHits images.`);
+    Notiflix.Loading.remove();
+    createMarkup(hits);
+  }
+
+  if (totalHits <= per_page) {
+    loadMore.classList.add('is-hidden');
+  } else {
+    loadMore.classList.remove('is-hidden');
+    loadMore.addEventListener('click', LoadingMore);
+  } 
+} catch (error) {
+  throw new Error(error);
+}
   evt.target.reset();
 }
 
 async function LoadingMore() {
   page += 1;
   Notiflix.Loading.dots('Loading...');
-  fetchinfo(searchValue, page).then(data => {
-    const dseatch = data.hits;
-    const lastPage = Math.ceil(data.totalHits / per_page);
-    Notiflix.Loading.remove();
-    createMarkup(dseatch);
-    if (page === lastPage) {
-      Notify.info("We're sorry, but you've reached the end of search results.");
-      window.removeEventListener('scroll', scrollinfinity);
-    }
-  });
-}
-function scrollinfinity() {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 20) {
-    LoadingMore();
+  const { hits, totalHits } = await fetchinfo(searchValue, page);
+  const lastPage = Math.ceil(totalHits / per_page);
+  Notiflix.Loading.remove();
+  createMarkup(hits);
+  if (page === lastPage) {
+    Notify.info("We're sorry, but you've reached the end of search results.");
+    loadMore.classList.add('is-hidden');
   }
 }
